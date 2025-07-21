@@ -54,3 +54,15 @@ CLI tool for processing Garmin .fit files into cleaned CSV data.
 - Date automatically extracted from .fit file metadata
 - Filename format: `YYYYMMDD.csv` or `YYYYMMDD_base.csv`
 - Geographic filtering removes GPS coordinates from final output for privacy
+
+## base_analysis.py
+
+Framework for aerobic efficiency analysis of base runs. Code is specific to my analysis but easily adaptable.
+
+## banister_modeling.py
+
+Framework for applying Banister model to running data.
+
+## data_handling.py
+
+Functions for loading and handling of files generated using the CLI.
