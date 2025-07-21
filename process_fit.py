@@ -7,6 +7,7 @@ import os
 import argparse
 import pandas as pd
 import geopandas as gpd
+import numpy as np
 import fitdecode
 from shapely.geometry import Polygon
 from dotenv import load_dotenv
@@ -14,6 +15,9 @@ from pathlib import Path
 
 
 def semicircle_to_degrees(semicircle_val):
+    if semicircle_val is None:
+        return np.nan
+
     return semicircle_val / (2**32 / 360)
 
 
@@ -21,22 +25,24 @@ def meters_per_sec_to_min_per_mile(pace_m_per_s):
     if pace_m_per_s == 0.0:
         return 0.0
 
-    return 1 / (pace_m_per_s * 60 / 1609)
+    return round(1 / (pace_m_per_s * 60 / 1609), 2)
 
 
 def process_fit_file(
-    fit_file_path, is_base_run=False, filter_run=False, output_dir="~./data"
+    fit_file_path, run_type="base", filter_run=False, output_dir="~./data"
 ):
     """
     Process a .fit file and save as cleaned CSV
 
     Args:
         fit_file_path (str): Path to the .fit file
-        is_base_run (bool): Whether this is a base run (affects filename)
+        run_type (str): Type of run (ex: 'base', 'tempo', etc). Adds type of run to filename.
         filter_run (bool): Whether to filter run to a specific geographical region
         output_dir (str): Directory to save the output file
     """
-    run_df = pd.DataFrame(columns=["timestamp", "lat", "lon", "pace", "hr", "distance"])
+    run_df = pd.DataFrame(
+        columns=["timestamp", "lat", "lon", "pace", "hr", "distance", "elevation"]
+    )
 
     # Load .fit files
     print(f"Processing {fit_file_path}...")
@@ -55,6 +61,7 @@ def process_fit_file(
                         "enhanced_speed",
                         "heart_rate",
                         "distance",
+                        "enhanced_altitude",
                     ]
                 ):
                     continue
@@ -65,7 +72,8 @@ def process_fit_file(
                     "lon": semicircle_to_degrees(data["position_long"]),
                     "pace": meters_per_sec_to_min_per_mile(data["enhanced_speed"]),
                     "hr": data["heart_rate"],
-                    "distance": data["distance"] / 1609,
+                    "distance": round(data["distance"] / 1609, 5),
+                    "elevation": round(data["enhanced_altitude"] * 3.28),
                 }
                 run_df.loc[index] = row
                 index += 1
@@ -100,10 +108,7 @@ def process_fit_file(
     df = df.reset_index(level=0, drop=True)
     date_str = df.loc[0, "timestamp"].strftime("%Y%m%d")
 
-    if is_base_run:
-        filename = f"{date_str}_base.csv"
-    else:
-        filename = f"{date_str}.csv"
+    filename = f"{date_str}_{run_type}.csv"
 
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
@@ -122,19 +127,19 @@ def main():
         description="Process Garmin .fit files into cleaned CSV data",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
-Examples:
-  python process_fit.py data.fit
-  python process_fit.py data.fit --base --filter
-  python process_fit.py data.fit --output ./processed_data
-        """,
+            Examples:
+            python process_fit.py data.fit
+            python process_fit.py data.fit --type sprint --filter
+            python process_fit.py data.fit --output ./processed_data
+            """,
     )
 
     parser.add_argument("fit_file", help="Path to the .fit file to process")
 
     parser.add_argument(
-        "--base",
-        action="store_true",
-        help="Mark this as a base run (adds '_base' to filename)",
+        "--type",
+        default="base",
+        help="Specify run type (e.g., 'tempo', 'sprints', 'LR')",
     )
 
     parser.add_argument(
@@ -171,7 +176,7 @@ Examples:
         return 1
 
     try:
-        process_fit_file(args.fit_file, args.base, args.filter, args.output)
+        process_fit_file(args.fit_file, args.type, args.filter, args.output)
         return 0
     except Exception as e:
         print(f"Error processing file: {e}")

@@ -17,7 +17,7 @@ CLI tool for processing Garmin .fit files into cleaned CSV data.
 
 #### Options
 
-- `--base`: Mark as a base run (saves as `YYYYMMDD_base.csv` instead of `YYYYMMDD.csv`)
+- `--type RUN TYPE`: Type of run (saves as `YYYYMMDD_run_type.csv` instead of `YYYYMMDD.csv`)
 - `--filter`: Allows geographic filtering to a specific region
 - `--output DIR`: Output directory (default: `./data`)
 
@@ -28,10 +28,10 @@ CLI tool for processing Garmin .fit files into cleaned CSV data.
 ./process_fit.py ./raw_data/activity.fit
 
 # Base run
-./process_fit.py ./raw_data/activity.fit --base
+./process_fit.py ./raw_data/activity.fit --type base
 
-# Skip geographic filtering
-./process_fit.py ./raw_data/activity.fit --filter
+# Tempo run with geographic filtering
+./process_fit.py ./raw_data/activity.fit --type tempo --filter
 
 # Custom output directory
 ./process_fit.py ./raw_data/activity.fit --output ./processed_runs
