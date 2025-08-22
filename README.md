@@ -1,5 +1,5 @@
 # heat-economy
- An N=1 analysis of running efficiency before and after heat adaptation, using my personal data to investigate the effects of heat exposure.
+ Started as an N=1 analysis of running efficiency before and after heat adaptation, using my personal data to investigate the effects of heat exposure, ended up as a full-blown analysis of my running data.
 
 ## process_fit.py
 
@@ -55,14 +55,24 @@ CLI tool for processing Garmin .fit files into cleaned CSV data.
 - Filename format: `YYYYMMDD.csv` or `YYYYMMDD_base.csv`
 - Geographic filtering removes GPS coordinates from final output for privacy
 
+## data_handling.py
+
+Functions for loading and handling of files generated using the CLI.
+
 ## base_analysis.py
 
 Framework for aerobic efficiency analysis of base runs. Code is specific to my analysis but easily adaptable.
 
 ## banister_modeling.py
 
-Framework for applying Banister model to running data.
+Framework for applying Banister model to running data. Also creates the file 'load.csv' which is necessary for ridge regression. This is a good place to start before getting into other analyses.
 
-## data_handling.py
+## ridge_data_prep.py
 
-Functions for loading and handling of files generated using the CLI.
+Code for organizing data into weekly stats to be used in Ridge Regression.
+
+## ridge_regression.py
+
+Code for applying ridge regression to data. Currently uses LOO CV given the small dataset that I have, but could be changed to a train-test split for larger datasets.
+
+

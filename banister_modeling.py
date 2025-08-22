@@ -9,7 +9,7 @@ from data_handling import load_runs
 run_types = ["z2", "vo2", "sprint", "threshold", "trail"]
 all_runs = {}
 for run_type in run_types:
-    runs = load_runs(start_date="20250602", end_date="20250721", type=run_type)
+    runs = load_runs(start_date="20250602", end_date="20250817", type=run_type)
     all_runs[run_type] = runs
 
 max_hr = 196
@@ -123,3 +123,8 @@ for ax in axes:
 
 plt.tight_layout()
 plt.show()
+
+load_df = pd.DataFrame(
+    {"Date": trimp_df["date"], "Chronic Load": fitness, "Acute Load": fatigue}
+)
+load_df.to_csv("load.csv", index=False)

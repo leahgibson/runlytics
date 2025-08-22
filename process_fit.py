@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 """
 CLI tool for processing Garmin .fit running files into cleaned CSV data.
 """
