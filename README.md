@@ -1,4 +1,4 @@
-# heat-economy
+# runlytics
  Started as an N=1 analysis of running efficiency before and after heat adaptation, using my personal data to investigate the effects of heat exposure, ended up as a full-blown analysis of my running data.
 
 ## process_fit.py
@@ -75,4 +75,10 @@ Code for organizing data into weekly stats to be used in Ridge Regression.
 
 Code for applying ridge regression to data. Currently uses LOO CV given the small dataset that I have, but could be changed to a train-test split for larger datasets.
 
+## nn_data_prep.py
 
+Code for organizing data to use to predict my 50k race time.
+
+## race_prediction.py
+
+Using a regression model and a small NN to predict my 50k race time.
