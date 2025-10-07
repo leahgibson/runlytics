@@ -115,7 +115,7 @@ print(f"Total time prediction: {sum(y_pred)} min")
 
 features = ["net_elevation", "altitude", "hr"]
 
-X = df[features].values  # .drop(columns=["pace"]).values
+X = df[features].values 
 y = df["pace"].values
 
 # scale inputs
@@ -131,8 +131,6 @@ mlp = MLPRegressor(
 )
 
 mlp.fit(X, y)
-
-nn_y_pred = mlp.predict(X)
 
 # Predict race
 
