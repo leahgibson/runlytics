@@ -92,7 +92,7 @@ ax2.legend()
 ax2.set_title("Pace vs Net Elevation (Colored by Heart Rate)")
 
 plt.tight_layout()
-plt.savefig("race_relationships.png", dpi=300)
+# plt.savefig("race_relationships.png", dpi=300)
 plt.show()
 
 
@@ -115,7 +115,7 @@ print(f"Total time prediction: {sum(y_pred)} min")
 
 features = ["net_elevation", "altitude", "hr"]
 
-X = df[features].values 
+X = df[features].values
 y = df["pace"].values
 
 # scale inputs
@@ -142,10 +142,47 @@ print("##### Neural Network #####")
 print(f"paces: {nn_y_pred}")
 print(f"Total time prediction: {sum(nn_y_pred)} min")
 
+run_results = [
+    9.23,
+    9.35,
+    9.48,
+    12.07,
+    17.97,
+    9.68,
+    10.1,
+    13,
+    15.48,
+    15.53,
+    12.5,
+    17.32,
+    18.2,
+    16.95,
+    16.65,
+    17.2,
+    25.57,
+    13.93,
+    13.7,
+    12.48,
+    14.18,
+    13.53,
+    10.93,
+    13.38,
+    10.57,
+    12.08,
+    11.23,
+    16.13,
+    14.05,
+    10.017,
+    11.35,
+    12.43,
+    14.417,
+]
+
 fig, ax1 = plt.subplots(figsize=(7, 4))
 
 ax1.plot(race_df["mile"], y_pred, color="blue", label="Linear Regression")
 ax1.plot(race_df["mile"], nn_y_pred, color="green", label="Neural Network")
+ax1.plot(race_df["mile"], run_results, color="black", label="Race Splits")
 ax1.legend()
 ax1.set_xlabel("Miles")
 ax1.set_ylabel("Pace (min/mi)")
@@ -164,5 +201,5 @@ ax2.set_ylabel("Altitude (ft)", color="gray")
 ax2.tick_params(axis="y", labelcolor="gray")
 
 plt.tight_layout()
-plt.savefig("race_predictions.png", dpi=300)
+plt.savefig("race_results.png", dpi=300)
 plt.show()
